@@ -1,16 +1,15 @@
-# flutter_application_1
+# Recharge Reminder App
 
-A new Flutter project.
+This app lets you keep track of your frequent mobile recharges.
 
-## Getting Started
+## What's working now
 
-This project is a starting point for a Flutter application.
+I am just learning Flutter and the app is in its development stage.
 
-A few resources to get you started if this is your first Flutter project:
+The base app is ready. But currently, you can't save the frequent recharges permanently in the app. The data will get deleted every time you restart the app.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## TODO
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- connect a database (I'm thinking of Hive, which is a fast NoSQL database)
+- add notification functionality to remind users about the recharge validity
+- maybe store the data in the cloud in the future
