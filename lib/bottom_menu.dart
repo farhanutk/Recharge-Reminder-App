@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/recharge.dart';
 
 class BottomMenu extends StatefulWidget {
   final Function(String, String, String, String, String) addRecharge;
@@ -23,10 +22,6 @@ class _BottomMenuState extends State<BottomMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.symmetric(
-      //   vertical: 30,
-      //   horizontal: 20,
-      // ),
       padding: EdgeInsets.fromLTRB(
           20, 30, 20, MediaQuery.of(context).viewInsets.bottom),
       child: ListView(
