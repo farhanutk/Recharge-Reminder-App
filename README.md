@@ -11,7 +11,8 @@ The base app is ready. But currently, you can't save the frequent recharges perm
 ## TODO
 
 - connect a database (I'm thinking of Hive, which is a fast NoSQL database) [Done ✅]
-- store *Expiry Date* instead of *Validity*
+- store *Expiry Date* instead of *Validity* [Done ✅]
+- sort recharge list according to *Expiry Date*
 - add form validation
 - add notification functionality to remind users about the recharge validity
 - maybe store the data in the cloud in the future

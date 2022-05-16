@@ -23,13 +23,14 @@ class RechargeAdapter extends TypeAdapter<Recharge> {
       amount: fields[3] as String,
       date: fields[4] as String,
       info: fields[5] as String,
+      operator: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Recharge obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class RechargeAdapter extends TypeAdapter<Recharge> {
       ..writeByte(4)
       ..write(obj.date)
       ..writeByte(5)
-      ..write(obj.info);
+      ..write(obj.info)
+      ..writeByte(6)
+      ..write(obj.operator);
   }
 
   @override

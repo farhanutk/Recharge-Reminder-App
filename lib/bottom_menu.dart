@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomMenu extends StatefulWidget {
-  final Function(String, String, String, String, String) addRecharge;
+  final Function(String, String, String, String, String, String) addRecharge;
   BottomMenu(this.addRecharge);
 
   @override
@@ -15,9 +15,13 @@ class _BottomMenuState extends State<BottomMenu> {
 
   final amountController = TextEditingController();
 
-  final validityController = TextEditingController();
+  DateTime? date;
+
+  late String stringDate;
 
   final infoController = TextEditingController();
+
+  String operator = 'Jio';
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +47,38 @@ class _BottomMenuState extends State<BottomMenu> {
               labelText: 'Name',
             ),
           ),
-          TextField(
-            controller: numberController,
-            decoration: InputDecoration(
-              labelText: 'Phone number',
-            ),
-            keyboardType: TextInputType.phone,
+          Row(
+            children: [
+              Flexible(
+                child: TextField(
+                  controller: numberController,
+                  decoration: InputDecoration(
+                    labelText: 'Phone number',
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+              ),
+              SizedBox(
+                width: 18.0,
+              ),
+              TextButton.icon(
+                onPressed: () async {
+                  date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2222),
+                  );
+                  stringDate = date.toString();
+                },
+                icon: Icon(Icons.calendar_today),
+                label: Text('Expiry date'),
+              ),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
                 child: TextField(
@@ -66,14 +93,41 @@ class _BottomMenuState extends State<BottomMenu> {
               SizedBox(
                 width: 18.0,
               ),
+              Text(
+                'Operator',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.grey[600],
+                ),
+              ),
               Flexible(
-                child: TextField(
-                  controller: validityController,
-                  decoration: InputDecoration(
-                    labelText: 'Recharge validity',
-                    hintText: 'in days',
-                  ),
-                  keyboardType: TextInputType.number,
+                // child: TextField(
+                //   controller: validityController,
+                //   decoration: InputDecoration(
+                //     labelText: 'Recharge validity',
+                //     hintText: 'in days',
+                //   ),
+                //   keyboardType: TextInputType.number,
+                // ),
+                child: DropdownButton<String>(
+                  value: operator,
+                  items: <String>[
+                    'Jio',
+                    'Airtel',
+                    'Vi',
+                    'BSNL',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      operator = newValue!;
+                    });
+                  },
                 ),
               ),
             ],
@@ -90,11 +144,13 @@ class _BottomMenuState extends State<BottomMenu> {
           ),
           ElevatedButton(
             onPressed: () => widget.addRecharge(
-                nameController.text,
-                numberController.text,
-                amountController.text,
-                validityController.text,
-                infoController.text),
+              nameController.text,
+              numberController.text,
+              amountController.text,
+              stringDate,
+              infoController.text,
+              operator,
+            ),
             child: Text(
               'Submit',
               style: TextStyle(
@@ -104,6 +160,9 @@ class _BottomMenuState extends State<BottomMenu> {
             ),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
           )
         ],

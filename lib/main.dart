@@ -17,6 +17,9 @@ class RechargeReminderApp extends StatelessWidget {
       title: 'Recharge Reminder App',
       theme: ThemeData(
         primarySwatch: Colors.amber,
+        dialogTheme: const DialogTheme(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)))),
       ),
       home: Home(),
     );
@@ -71,6 +74,9 @@ class _HomeState extends State<Home> {
                             ),
                             Column(
                               children: recharges.map((recharge) {
+                                print(
+                                    '${DateTime.parse(recharge.date).difference(DateTime.now()).inDays} days remaining');
+                                print(recharge.date + recharge.operator);
                                 return Card(
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   shape: RoundedRectangleBorder(
@@ -102,12 +108,37 @@ class _HomeState extends State<Home> {
                                                 SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text(
-                                                  recharge.number,
-                                                  style: TextStyle(
-                                                    fontSize: 22.0,
-                                                    color: Colors.grey[800],
-                                                  ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      recharge.number,
+                                                      style: TextStyle(
+                                                        fontSize: 22.0,
+                                                        color: Colors.grey[800],
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 5),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 3,
+                                                              horizontal: 7),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        color: Colors.amber[50],
+                                                      ),
+                                                      child: Text(
+                                                        recharge.operator,
+                                                        style: TextStyle(
+                                                          color: Colors.amber,
+                                                          fontSize: 16.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
@@ -139,7 +170,7 @@ class _HomeState extends State<Home> {
                                               ),
                                             ),
                                             Text(
-                                              '${recharge.date} days',
+                                              formatDate(recharge.date),
                                               style: TextStyle(
                                                 fontSize: 22.0,
                                                 color: Colors.grey[600],
@@ -202,21 +233,26 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 showModalBottomSheet(
                     context: context,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(15.0),
+                            topRight: const Radius.circular(15.0))),
                     builder: (context) {
-                      return BottomMenu((
-                        String nameController,
-                        String numberController,
-                        String amountController,
-                        String validityController,
-                        String infoController,
-                      ) {
+                      return BottomMenu((String nameController,
+                          String numberController,
+                          String amountController,
+                          String date,
+                          String infoController,
+                          String operator) {
                         setState(() {
                           putValues(
-                              nameController,
-                              numberController,
-                              amountController,
-                              validityController,
-                              infoController);
+                            nameController,
+                            numberController,
+                            amountController,
+                            date,
+                            infoController,
+                            operator,
+                          );
                         });
                       });
                     });
@@ -240,7 +276,6 @@ class _HomeState extends State<Home> {
       int i;
       for (i = 0; i < rechargeDB.length; i++) {
         recharges.add(await rechargeDB.getAt(i));
-        print(rechargeDB.getAt(i).name);
       }
       return recharges;
     }
@@ -250,16 +285,18 @@ class _HomeState extends State<Home> {
       String nameController,
       String numberController,
       String amountController,
-      String validityController,
-      String infoController) async {
+      String date,
+      String infoController,
+      String operator) async {
     final rechargeDB = await Hive.openBox('recharge_db');
 
     Recharge recharge = Recharge(
         name: nameController,
         number: numberController,
         amount: amountController,
-        date: validityController,
-        info: infoController);
+        date: date,
+        info: infoController,
+        operator: operator);
 
     int _id = await rechargeDB.add(recharge);
 
@@ -280,5 +317,17 @@ class _HomeState extends State<Home> {
     final rechargeDB = await Hive.openBox('recharge_db');
     await rechargeDB.delete(rechargeId);
     print(rechargeId);
+  }
+
+  String formatDate(String date) {
+    int difference =
+        (DateTime.parse(date).difference(DateTime.now()).inHours / 24).ceil();
+    print('$difference difference');
+    if (difference == 1) {
+      return 'Expiring tomorrow';
+    } else if (difference == 0) {
+      return 'Expiring today';
+    } else
+      return '$difference days remaining';
   }
 }

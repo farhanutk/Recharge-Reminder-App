@@ -21,13 +21,17 @@ class Recharge {
   @HiveField(5)
   String info;
 
+  @HiveField(6)
+  String operator;
+
   Recharge(
       {this.id,
       required this.name,
       required this.number,
       required this.amount,
       required this.date,
-      required this.info});
+      required this.info,
+      required this.operator});
   showRecharge() {
     print(name);
   }
