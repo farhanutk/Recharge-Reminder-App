@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/bottom_menu.dart';
 import 'package:flutter_application_1/recharge.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 main() async {
   await Hive.initFlutter();
@@ -73,10 +74,7 @@ class _HomeState extends State<Home> {
                               height: 25,
                             ),
                             Column(
-                              children: recharges.map((recharge) {
-                                print(
-                                    '${DateTime.parse(recharge.date).difference(DateTime.now()).inDays} days remaining');
-                                print(recharge.date + recharge.operator);
+                              children: sortByDate(recharges).map((recharge) {
                                 return Card(
                                   margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   shape: RoundedRectangleBorder(
@@ -170,7 +168,7 @@ class _HomeState extends State<Home> {
                                               ),
                                             ),
                                             Text(
-                                              formatDate(recharge.date),
+                                              getDaysToExpiry(recharge.date),
                                               style: TextStyle(
                                                 fontSize: 22.0,
                                                 color: Colors.grey[600],
@@ -181,12 +179,27 @@ class _HomeState extends State<Home> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text(
-                                          recharge.info,
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.grey[700],
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              recharge.info,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                            Text(
+                                              beautifyDate(recharge.date),
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.grey,
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -316,18 +329,33 @@ class _HomeState extends State<Home> {
   Future deleteValues(int? rechargeId) async {
     final rechargeDB = await Hive.openBox('recharge_db');
     await rechargeDB.delete(rechargeId);
-    print(rechargeId);
   }
 
-  String formatDate(String date) {
+  String getDaysToExpiry(String date) {
     int difference =
         (DateTime.parse(date).difference(DateTime.now()).inHours / 24).ceil();
-    print('$difference difference');
-    if (difference == 1) {
-      return 'Expiring tomorrow';
-    } else if (difference == 0) {
+    if (difference == 0) {
       return 'Expiring today';
-    } else
+    } else if (difference == 1) {
+      return 'Expiring tomorrow';
+    } else if (difference > 1) {
       return '$difference days remaining';
+    } else {
+      return 'Expired';
+    }
+  }
+
+  List<Recharge> sortByDate(List<Recharge> recharges) {
+    recharges.sort((a, b) {
+      final adate = a.date;
+      final bdate = b.date;
+      return adate.compareTo(bdate);
+    });
+    return recharges;
+  }
+
+  String beautifyDate(String date) {
+    DateTime rawDate = DateTime.parse(date);
+    return DateFormat('dd MMMM yyyy').format(rawDate);
   }
 }

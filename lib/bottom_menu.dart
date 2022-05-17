@@ -66,7 +66,7 @@ class _BottomMenuState extends State<BottomMenu> {
                   date = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
+                    firstDate: DateTime(2020),
                     lastDate: DateTime(2222),
                   );
                   stringDate = date.toString();
@@ -110,24 +110,26 @@ class _BottomMenuState extends State<BottomMenu> {
                 //   ),
                 //   keyboardType: TextInputType.number,
                 // ),
-                child: DropdownButton<String>(
-                  value: operator,
-                  items: <String>[
-                    'Jio',
-                    'Airtel',
-                    'Vi',
-                    'BSNL',
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      operator = newValue!;
-                    });
-                  },
+                child: Container(
+                  child: DropdownButton<String>(
+                    value: operator,
+                    items: <String>[
+                      'Jio',
+                      'Airtel',
+                      'Vi',
+                      'BSNL',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        operator = newValue!;
+                      });
+                    },
+                  ),
                 ),
               ),
             ],
