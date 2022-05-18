@@ -6,13 +6,13 @@ This app lets you keep track of your frequent mobile recharges.
 
 I am just learning Flutter and the app is in its development stage.
 
-The base app is ready. But currently, you can't save the frequent recharges permanently in the app. The data will get deleted every time you restart the app.
+The base app is ready. My objective is to learn different Flutter concepts by implementing different features in this app.
 
 ## TODO
 
 - connect a database (I'm thinking of Hive, which is a fast NoSQL database) [Done ✅]
 - store *Expiry Date* instead of *Validity* [Done ✅]
 - sort recharge list according to *Expiry Date* [Done ✅]
-- add form validation
+- add form validation [Done ✅]
 - add notification functionality to remind users about the recharge validity
 - maybe store the data in the cloud in the future

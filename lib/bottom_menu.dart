@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BottomMenu extends StatefulWidget {
   final Function(String, String, String, String, String, String) addRecharge;
@@ -19,98 +20,135 @@ class _BottomMenuState extends State<BottomMenu> {
 
   late String stringDate;
 
+  String dateButtonText = 'Expiry date';
+
   final infoController = TextEditingController();
 
   String operator = 'Jio';
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(
           20, 30, 20, MediaQuery.of(context).viewInsets.bottom),
-      child: ListView(
-        children: [
-          Text(
-            'Add details of the recharge below',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.grey[600],
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          children: [
+            Text(
+              'Add details of the recharge below',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.grey[600],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 18.0,
-          ),
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              labelText: 'Name',
+            SizedBox(
+              height: 18.0,
             ),
-          ),
-          Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: numberController,
-                  decoration: InputDecoration(
-                    labelText: 'Phone number',
+            TextFormField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: 'Name',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Enter the name';
+                } else
+                  return null;
+              },
+            ),
+            Row(
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    controller: numberController,
+                    decoration: InputDecoration(
+                      labelText: 'Phone number',
+                    ),
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Enter the phone number';
+                      } else if (!RegExp(r'^(?:[+0]9)?[0-9]{10}$')
+                          .hasMatch(value)) {
+                        return 'Enter a valid phone number';
+                      } else
+                        return null;
+                    },
                   ),
-                  keyboardType: TextInputType.phone,
                 ),
-              ),
-              SizedBox(
-                width: 18.0,
-              ),
-              TextButton.icon(
-                onPressed: () async {
-                  date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2222),
-                  );
-                  stringDate = date.toString();
-                },
-                icon: Icon(Icons.calendar_today),
-                label: Text('Expiry date'),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: amountController,
-                  decoration: InputDecoration(
-                    labelText: 'Recharge amount',
-                    hintText: 'in rupees',
+                SizedBox(
+                  width: 18.0,
+                ),
+                TextButton.icon(
+                  onPressed: () async {
+                    date = await showDatePicker(
+                      context: context,
+                      initialDate:
+                          date == null ? DateTime.now() : date as DateTime,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2222),
+                    );
+                    stringDate = date.toString();
+                    setState(() {
+                      if (date == null) {
+                        dateButtonText = 'Expiry date';
+                      } else
+                        dateButtonText =
+                            DateFormat('dd MMMM yyyy').format(date as DateTime);
+                    });
+                  },
+                  icon: Icon(Icons.calendar_today_sharp),
+                  label: Text(dateButtonText),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: TextFormField(
+                    controller: amountController,
+                    decoration: InputDecoration(
+                      labelText: 'Recharge amount',
+                      hintText: 'in rupees',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Enter the recharge amount';
+                      } else if ((int.tryParse(value)) == null ||
+                          (int.tryParse(value))! < 0) {
+                        return 'Enter a valid recharge amount';
+                      } else
+                        return null;
+                    },
                   ),
-                  keyboardType: TextInputType.number,
                 ),
-              ),
-              SizedBox(
-                width: 18.0,
-              ),
-              Text(
-                'Operator',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.grey[600],
+                SizedBox(
+                  width: 18.0,
                 ),
-              ),
-              Flexible(
-                // child: TextField(
-                //   controller: validityController,
-                //   decoration: InputDecoration(
-                //     labelText: 'Recharge validity',
-                //     hintText: 'in days',
-                //   ),
-                //   keyboardType: TextInputType.number,
-                // ),
-                child: Container(
+                Text(
+                  'Operator',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                Flexible(
+                  // child: TextField(
+                  //   controller: validityController,
+                  //   decoration: InputDecoration(
+                  //     labelText: 'Recharge validity',
+                  //     hintText: 'in days',
+                  //   ),
+                  //   keyboardType: TextInputType.number,
+                  // ),
                   child: DropdownButton<String>(
                     value: operator,
                     items: <String>[
@@ -131,43 +169,53 @@ class _BottomMenuState extends State<BottomMenu> {
                     },
                   ),
                 ),
-              ),
-            ],
-          ),
-          TextField(
-            controller: infoController,
-            decoration: InputDecoration(
-              labelText: 'Additional info',
-              hintText: 'e.g., 3GB/day',
+              ],
             ),
-          ),
-          SizedBox(
-            height: 18.0,
-          ),
-          ElevatedButton(
-            onPressed: () => widget.addRecharge(
-              nameController.text,
-              numberController.text,
-              amountController.text,
-              stringDate,
-              infoController.text,
-              operator,
-            ),
-            child: Text(
-              'Submit',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
+            TextField(
+              controller: infoController,
+              decoration: InputDecoration(
+                labelText: 'Additional info',
+                hintText: 'e.g., 3GB/day',
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
+            SizedBox(
+              height: 18.0,
             ),
-          )
-        ],
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  if (date == null) {
+                    setState(() {
+                      dateButtonText = 'Select expiry date';
+                    });
+                    return;
+                  }
+                  return widget.addRecharge(
+                    nameController.text,
+                    numberController.text,
+                    amountController.text,
+                    stringDate,
+                    infoController.text,
+                    operator,
+                  );
+                }
+              },
+              child: Text(
+                'Submit',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
