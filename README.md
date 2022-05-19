@@ -14,5 +14,7 @@ The base app is ready. My objective is to learn different Flutter concepts by im
 - store *Expiry Date* instead of *Validity* [Done ✅]
 - sort recharge list according to *Expiry Date* [Done ✅]
 - add form validation [Done ✅]
-- add notification functionality to remind users about the recharge validity
+- add notification functionality to remind users about the recharge validity [Done ✅]
+- add an app icon
+- tidy up the code
 - maybe store the data in the cloud in the future

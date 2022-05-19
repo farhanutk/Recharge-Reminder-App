@@ -5,6 +5,8 @@ import 'package:flutter_application_1/recharge.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
+import 'notification_functions.dart';
+
 main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(RechargeAdapter());
@@ -44,6 +46,12 @@ class _HomeState extends State<Home> {
     // Recharge('Farhan', '9061253087', '599', '56', '2GB/day'),
     // Recharge('Uvais', '9061253087', '599', '56', '2GB/day')
   ];
+
+  @override
+  void initState() {
+    initialiseNotifications();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -323,12 +331,16 @@ class _HomeState extends State<Home> {
     recharge = rechargeDB.values.toList()[lastIndex];
     recharge.id = _id;
     rechargeDB.putAt(lastIndex, recharge);
+
+    showNotification(_id, nameController, numberController, date);
+
     Navigator.pop(context);
   }
 
   Future deleteValues(int? rechargeId) async {
     final rechargeDB = await Hive.openBox('recharge_db');
     await rechargeDB.delete(rechargeId);
+    deleteNotificationSchedule(rechargeId as int);
   }
 
   String getDaysToExpiry(String date) {
