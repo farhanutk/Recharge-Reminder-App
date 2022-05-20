@@ -29,12 +29,6 @@ showNotification(int id, String name, String number, String date) async {
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  await flutterLocalNotificationsPlugin.show(
-      id,
-      'Recharge expiring tomorrow',
-      'Your recharge for $number ($name) is expiring tomorrow.',
-      platformChannelSpecifics);
-
   tz.initializeTimeZones();
 
   if (minutesToExpiry(date) > 840) {

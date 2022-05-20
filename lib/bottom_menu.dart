@@ -11,15 +11,11 @@ class BottomMenu extends StatefulWidget {
 
 class _BottomMenuState extends State<BottomMenu> {
   final nameController = TextEditingController();
-
   final numberController = TextEditingController();
-
   final amountController = TextEditingController();
 
   DateTime? date;
-
   late String stringDate;
-
   String dateButtonText = 'Expiry date';
 
   final infoController = TextEditingController();
