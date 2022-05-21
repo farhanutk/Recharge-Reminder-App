@@ -5,6 +5,7 @@ import 'package:flutter_application_1/recharge.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
+import 'db_functions.dart';
 import 'notification_functions.dart';
 
 main() async {
@@ -267,13 +268,13 @@ class _HomeState extends State<Home> {
                           String operator) {
                         setState(() {
                           putValues(
-                            nameController,
-                            numberController,
-                            amountController,
-                            date,
-                            infoController,
-                            operator,
-                          );
+                              nameController,
+                              numberController,
+                              amountController,
+                              date,
+                              infoController,
+                              operator,
+                              context);
                         });
                       });
                     });
@@ -287,61 +288,7 @@ class _HomeState extends State<Home> {
         });
   }
 
-  Future<List<Recharge>> getValues(List<Recharge> recharges) async {
-    final rechargeDB = await Hive.openBox('recharge_db');
-    if (rechargeDB.isEmpty) {
-      recharges.clear();
-      return recharges;
-    } else {
-      recharges.clear();
-      int i;
-      for (i = 0; i < rechargeDB.length; i++) {
-        recharges.add(await rechargeDB.getAt(i));
-      }
-      return recharges;
-    }
-  }
-
-  Future putValues(
-      String nameController,
-      String numberController,
-      String amountController,
-      String date,
-      String infoController,
-      String operator) async {
-    final rechargeDB = await Hive.openBox('recharge_db');
-
-    Recharge recharge = Recharge(
-        name: nameController,
-        number: numberController,
-        amount: amountController,
-        date: date,
-        info: infoController,
-        operator: operator);
-
-    int _id = await rechargeDB.add(recharge);
-
-    // recharge.id = _id;
-    // recharge.name = "far";
-
-    // rechargeDB.putAt(_id, recharge);
-
-    int lastIndex = rechargeDB.toMap().length - 1;
-
-    recharge = rechargeDB.values.toList()[lastIndex];
-    recharge.id = _id;
-    rechargeDB.putAt(lastIndex, recharge);
-
-    showNotification(_id, nameController, numberController, date);
-
-    Navigator.pop(context);
-  }
-
-  Future deleteValues(int? rechargeId) async {
-    final rechargeDB = await Hive.openBox('recharge_db');
-    await rechargeDB.delete(rechargeId);
-    deleteNotificationSchedule(rechargeId as int);
-  }
+  //Custom date functions for the UI
 
   String getDaysToExpiry(String date) {
     int difference =

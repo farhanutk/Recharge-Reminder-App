@@ -16,5 +16,5 @@ The base app is ready. My objective is to learn different Flutter concepts by im
 - add form validation [Done ✅]
 - add notification functionality to remind users about the recharge validity [Done ✅]
 - add an app icon [Done ✅]
-- tidy up the code
+- tidy up the code [Done ✅]
 - maybe store the data in the cloud in the future

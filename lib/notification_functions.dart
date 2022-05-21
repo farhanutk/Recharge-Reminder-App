@@ -63,22 +63,18 @@ showNotification(int id, String name, String number, String date) async {
   }
 }
 
+deleteNotificationSchedule(int id) async {
+  await flutterLocalNotificationsPlugin.cancel(id);
+}
+
+//Custom date functions for notifications
+
 Duration minutesToNotify(String date) {
   int minutes = minutesToExpiry(date) - 840;
-
-  print(date);
-  print(DateTime.parse(date));
-  print(DateTime.parse(date).difference(DateTime.now()).inMinutes);
-  print(minutes);
-
   Duration duration = Duration(minutes: minutes);
   return duration;
 }
 
 int minutesToExpiry(String date) {
   return DateTime.parse(date).difference(DateTime.now()).inMinutes;
-}
-
-deleteNotificationSchedule(int id) async {
-  await flutterLocalNotificationsPlugin.cancel(id);
 }
