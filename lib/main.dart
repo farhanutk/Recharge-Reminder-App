@@ -351,7 +351,7 @@ class _HomeState extends State<Home> {
     } else if (difference == 1) {
       return 'Expiring tomorrow';
     } else if (difference > 1) {
-      return '$difference days remaining';
+      return '$difference days left';
     } else {
       return 'Expired';
     }

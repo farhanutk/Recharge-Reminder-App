@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -7,7 +8,7 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 initialiseNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('ic_launcher');
 
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
@@ -25,6 +26,8 @@ showNotification(int id, String name, String number, String date) async {
     channelDescription: 'channel description',
     importance: Importance.max,
     priority: Priority.high,
+    styleInformation: BigTextStyleInformation(''),
+    color: Colors.amber,
   );
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
