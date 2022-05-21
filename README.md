@@ -4,9 +4,9 @@ This app lets you keep track of your frequent mobile recharges.
 
 ## What's working now
 
-I am just learning Flutter and the app is in its development stage.
+The base app is ready. My objective was to learn different Flutter concepts by implementing different features in this app.
 
-The base app is ready. My objective is to learn different Flutter concepts by implementing different features in this app.
+I am done with this project for now and might add additional features in the future.
 
 ## TODO
 
@@ -17,4 +17,10 @@ The base app is ready. My objective is to learn different Flutter concepts by im
 - add notification functionality to remind users about the recharge validity [Done ✅]
 - add an app icon [Done ✅]
 - tidy up the code [Done ✅]
-- maybe store the data in the cloud in the future
+
+## Features I might add in the future
+- a button to quickly find recharge packs for the particular mobile number
+- let users edit recharge details
+- let users edit the notification timing
+- add support for other categories of recharges (e.g., DTH) 
+- maybe store the data in the cloud
