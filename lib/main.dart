@@ -18,7 +18,7 @@ class RechargeReminderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Recharge Reminder App',
+      title: 'Recharge Reminder',
       theme: ThemeData(
         primarySwatch: Colors.amber,
         dialogTheme: const DialogTheme(
